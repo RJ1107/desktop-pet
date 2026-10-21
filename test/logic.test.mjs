@@ -207,9 +207,11 @@ test('several pets: one on the desktop, the others kept with their own memories 
     assert.equal(store.folder(), path.join(dir, '')); // the first pet's files stay where they were
     const gigi = store.data.active.id;
     store.addPet();
-    assert.equal(store.data.pet.traits.name, 'Mochi'); assert.equal(store.data.pet.adopted, false); assert.deepEqual(store.data.memories, []);
+    assert.equal(store.data.pet.traits.name, 'New pet'); assert.equal(store.data.pet.adopted, false); assert.deepEqual(store.data.memories, []);
+    assert.equal(store.data.pet.traits.base, '#9a9aa0'); // a plain grey stand-in, not the orange default
+    assert.deepEqual(store.pets().map(p => p.made), [false, false]);
     assert.ok(store.folder().startsWith(path.join(dir, 'pets')));
-    assert.deepEqual(store.pets().map(p => [p.name, p.active]), [['Mochi', true], ['Gigi', false]]);
+    assert.deepEqual(store.pets().map(p => [p.name, p.active]), [['New pet', true], ['Gigi', false]]);
     const mochi = store.data.active.id;
     assert.throws(() => store.removePet(mochi), /cannot be removed/);
     store.switchTo(gigi);

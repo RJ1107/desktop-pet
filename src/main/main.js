@@ -73,6 +73,7 @@ function openPanel(tab = 'look') {
   if (panel) { panel.webContents.send('command', {type: 'tab', tab}); panel.show(); panel.focus(); return; }
   panel = new BrowserWindow({
     width: 900, height: 700, minWidth: 720, minHeight: 560, title: 'Desktop Pet', autoHideMenuBar: true, backgroundColor: '#fbf6ee',
+    ...(process.env.PET_OFFSCREEN ? {x: -20000, y: 0} : {}), // automated checks: out of the person's way, like the pet
     webPreferences: {preload, contextIsolation: true, sandbox: true, backgroundThrottling: false} // it cuts out video frames while unfocused
   });
   panel.loadFile(path.join(root, 'src', 'renderer', 'panel.html'), {hash: tab});
@@ -238,7 +239,7 @@ function registerCalls(refreshTray) {
   const settle = () => { openPetFiles(); refreshTray(); changed(); broadcast('bowls:changed', bowls.load()); return store.view(); };
   const idle = () => { if (realistic.status().busy) throw new Error('A look is being made right now. Switch when it is done.'); };
   handle('pets:switch', id => { idle(); store.switchTo(String(id)); return settle(); });
-  handle('pets:add', () => { idle(); store.addPet(); return settle(); });
+  handle('pets:add', () => { idle(); store.addPet({name: app.getLocale().toLowerCase().startsWith('zh') ? '新宠物' : 'New pet'}); return settle(); });
   handle('pets:remove', id => {
     const folder = store.removePet(String(id)), home = app.getPath('userData');
     // The first pet's folder is the data folder itself: only its own subfolders go, never the folder.

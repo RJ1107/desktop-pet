@@ -58,7 +58,8 @@ export function createStore(directory, {encrypt, decrypt} = {}) {
     fs.writeFileSync(temp, JSON.stringify(data, null, 2));
     fs.renameSync(temp, file);
   }
-  const card = (id, pet, active) => ({id, active, name: pet.traits?.name ?? '', species: pet.traits?.species ?? 'cat', adopted: Boolean(pet.adopted)});
+  // made: whether its realistic look has been generated; until then it is a drawn stand-in.
+  const card = (id, pet, active) => ({id, active, name: pet.traits?.name ?? '', species: pet.traits?.species ?? 'cat', adopted: Boolean(pet.adopted), made: pet.look === 'realistic'});
   const pets = () => [card(data.active.id, data.pet, true), ...data.shelf.map(kept => card(kept.id, kept.pet, false))];
   function shelve() {
     data.shelf.push({id: data.active.id, folder: data.active.folder, pet: {...data.pet, lastSeen: Date.now()}, memories: data.memories, history: data.history});
@@ -74,12 +75,14 @@ export function createStore(directory, {encrypt, decrypt} = {}) {
     data.pet = wake(next.pet); data.memories = next.memories ?? []; data.history = next.history ?? [];
     save();
   }
-  // A new pet, straight onto the desktop, with a folder of its own. Returns its id.
-  function addPet() {
+  // A new pet, straight onto the desktop, with a folder of its own. Returns its id. Until its look is made it is a
+  // plain grey stand-in called "New pet": the usual orange Mochi looked as if the pet that was there had changed.
+  function addPet({name = 'New pet'} = {}) {
     shelve();
     const id = `pet-${randomUUID().slice(0, 8)}`; // (two made in the same millisecond must still differ)
     data.active = {id, folder: path.join('pets', id)};
     data.pet = fresh(); data.memories = []; data.history = [];
+    data.pet.traits = normalizeTraits({...data.pet.traits, name, base: '#9a9aa0', secondary: '#7c7c82', belly: '#d9d9dc', pattern: 'solid'});
     save();
     return id;
   }

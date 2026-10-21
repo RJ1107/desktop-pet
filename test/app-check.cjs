@@ -35,8 +35,10 @@ function fakeModel() {
   return new Promise(resolve => server.listen(0, '127.0.0.1', () => resolve(server)));
 }
 
+// The stand-in clips are recorded in the page; software encoding keeps that independent of the graphics card, whose
+// hardware encoder can stop producing frames until the computer restarts. (The app itself only ever decodes video.)
 async function launch(data) {
-  const app = await _electron.launch({executablePath: require(path.join(root, 'node_modules/electron')), args: [root, '--use-fake-device-for-media-stream', '--use-fake-ui-for-media-stream'], env: {...process.env, PET_DATA_DIR: data, PET_OFFSCREEN: '1'}});
+  const app = await _electron.launch({executablePath: require(path.join(root, 'node_modules/electron')), args: [root, '--use-fake-device-for-media-stream', '--use-fake-ui-for-media-stream', '--disable-accelerated-video-encode'], env: {...process.env, PET_DATA_DIR: data, PET_OFFSCREEN: '1'}});
   const find = async (name, wait = 10000) => {
     for (let waited = 0; waited < wait; waited += 200) {
       const page = app.windows().find(w => w.url().includes(name));
@@ -388,16 +390,17 @@ async function launch(data) {
     await panel.locator('#tabs [data-tab=look]').click();
     await panel.locator('#pets .pet-add').click();
     await panel.waitForFunction(() => window.panelDebug && document.querySelectorAll('#pets .pet-card').length === 2, null, {timeout: 10000});
-    await overlay.waitForFunction(() => petDebug.snapshot().traits.name === 'Mochi' && petDebug.snapshot().look === 'cartoon', null, {timeout: 10000});
+    await overlay.waitForFunction(() => /^(新宠物|New pet)$/.test(petDebug.snapshot().traits.name) && petDebug.snapshot().look === 'cartoon', null, {timeout: 10000});
     assert.equal((await overlay.evaluate(() => window.petHost.call('state'))).memories.length, 0); // a new pet knows nothing yet
-    assert.equal(await panel.locator('#pets .pet-card.on b').textContent(), 'Mochi');
+    assert.match(await panel.locator('#pets .pet-card.on b').textContent(), /^(新宠物|New pet)$/);
+    assert.match(await panel.locator('#pets .pet-card.on small').textContent(), /还没生成形象|no look yet/); // the card says it has no look yet
     await panel.locator('#pets button.pet-card', {hasText: 'Momo'}).click();
     await panel.waitForFunction(() => window.panelDebug && document.querySelector('#pets .pet-card.on b')?.textContent === 'Momo', null, {timeout: 10000});
     await overlay.waitForFunction(() => petDebug.snapshot().traits.name === 'Momo' && petDebug.snapshot().look === 'realistic', null, {timeout: 15000});
     assert.ok((await overlay.evaluate(() => window.petHost.call('state'))).memories.some(m => /Sam/.test(m.text)));
     // Removing takes two clicks; the pet on the desktop has no × at all.
     await panel.locator('#pets .pet-remove').click();
-    assert.match(await panel.locator('#pets button.pet-card small').textContent(), /Mochi/);
+    assert.match(await panel.locator('#pets button.pet-card small').textContent(), /新宠物|New pet/);
     await panel.locator('#pets .pet-remove').click();
     await panel.waitForFunction(() => document.querySelectorAll('#pets .pet-card').length === 1, null, {timeout: 5000});
     assert.equal(await panel.locator('#pets .pet-remove').count(), 0);

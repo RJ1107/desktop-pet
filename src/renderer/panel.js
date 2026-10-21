@@ -35,7 +35,7 @@ async function drawPets() {
     card.append(picture && !picture.error ? Object.assign(new Image(), {src: picture, alt: ''}) : Object.assign(document.createElement('span'), {className: 'pet-paw', textContent: '🐾'}));
     const words = document.createElement('span');
     words.append(Object.assign(document.createElement('b'), {textContent: pet.name || t('petsUnnamed')}),
-      Object.assign(document.createElement('small'), {textContent: removing === pet.id ? t('petsRemoveConfirm', {name: pet.name}) : t(pet.active ? 'petsOnDesktop' : 'petsSwitch')}));
+      Object.assign(document.createElement('small'), {textContent: removing === pet.id ? t('petsRemoveConfirm', {name: pet.name}) : [t(pet.active ? 'petsOnDesktop' : 'petsSwitch'), pet.made ? '' : t('petsNotMade')].filter(Boolean).join(' · ')}));
     card.append(words);
     if (!pet.active) { const remove = Object.assign(document.createElement('span'), {className: 'pet-remove', textContent: '×', title: t('petsRemove')}); remove.dataset.remove = pet.id; card.append(remove); }
     return card;

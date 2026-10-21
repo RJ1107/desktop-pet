@@ -25,7 +25,7 @@ const SCENES = [
   for (const name of ['pet.json', 'Local State']) if (fs.existsSync(path.join(real, name))) fs.copyFileSync(path.join(real, name), path.join(copy, name));
   for (const dir of ['realistic', 'photos', 'bowls']) if (fs.existsSync(path.join(real, dir))) fs.cpSync(path.join(real, dir), path.join(copy, dir), {recursive: true});
   fs.mkdirSync(out, {recursive: true});
-  const app = await _electron.launch({executablePath: require(path.join(root, 'node_modules/electron')), args: [root], env: {...process.env, PET_DATA_DIR: copy, PET_OFFSCREEN: '1'}});
+  const app = await _electron.launch({executablePath: require(path.join(root, 'node_modules/electron')), args: [root, '--disable-accelerated-video-encode'], env: {...process.env, PET_DATA_DIR: copy, PET_OFFSCREEN: '1'}});
   try {
     let overlay;
     for (let i = 0; i < 80 && !overlay; i++) { overlay = app.windows().find(w => w.url().includes('overlay.html')); if (!overlay) await new Promise(r => setTimeout(r, 250)); }
