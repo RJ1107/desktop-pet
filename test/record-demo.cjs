@@ -10,17 +10,13 @@ if (!out) { console.error('Give an output folder.'); process.exit(1); }
 
 // What happens, in order: [caption, line under it, what to do, seconds to film it].
 const SCENES = [
-  ['桌面宠物 · Gigi', '用三张自家猫的照片生成的写实桌面宠物', null, 4],
+  ['桌面宠物 · Desktop Pet', '用自家宠物的照片生成的写实桌面宠物  ·  A realistic desktop pet made from photos of your own', null, 4],
   ['自己在桌面上走来走去', 'It wanders about your desktop', pet => pet.command('run', pet.snapshot().x > 900 ? 520 : 1180), 5],
-  ['揣手手', 'Tucks its paws in', pet => pet.command('loaf'), 6],
-  ['伸懒腰', 'Stretches', pet => pet.command('stretch'), 6.5],
   ['喂猫粮：一粒一粒吃掉', 'Feed it, and it eats from the bowl', pet => { pet.setNeeds({food: 8}); pet.drop('kibble'); }, 9],
   ['手放在它头边，它会蹭你', 'Rest your hand by its head', pet => pet.command('nuzzle', 1), 5],
   ['摸久了，翻肚皮', 'Pet it long enough and it rolls over', pet => pet.command('roll'), 6.5],
-  ['洗脸', 'Washes its face', pet => pet.command('groom'), 4.6],
   ['走到屏幕边，扒着墙伸懒腰', 'At the side of the screen, it stretches up the wall', async pet => { pet.command('run', innerWidth - 200); for (let i = 0; i < 60 && ['run', 'rise'].includes(pet.snapshot().mode); i++) await new Promise(r => setTimeout(r, 100)); pet.command('scratch'); }, 8.5],
-  ['困了就睡', 'Naps when it is tired', pet => pet.command('sleep'), 5],
-  ['开源 · Windows / macOS', '用你自己的 API 密钥，给你家的猫或狗也做一只', null, 4]
+  ['开源 · Windows / macOS', 'Open source · bring your own API key and make one of your own pet', pet => pet.command('sleep'), 6]
 ];
 
 (async () => {

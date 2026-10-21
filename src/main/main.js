@@ -16,7 +16,10 @@ const here = path.dirname(fileURLToPath(import.meta.url));
 const root = path.join(here, '..', '..');
 const preload = path.join(here, '..', 'preload.cjs');
 // Tests point the app at a throwaway data folder.
+// The data folder keeps the name it had before the app had a product name ("Desktop Pet"), so pets made while running
+// from the source are found again by the installed app.
 if (process.env.PET_DATA_DIR) app.setPath('userData', process.env.PET_DATA_DIR);
+else app.setPath('userData', path.join(app.getPath('appData'), 'desktop-pet'));
 // Windows stops drawing a window it believes is covered. Another always-on-top window must not freeze the pet
 // or stall the settings window while it is cutting out video frames.
 app.commandLine.appendSwitch('disable-features', 'CalculateNativeWinOcclusion');

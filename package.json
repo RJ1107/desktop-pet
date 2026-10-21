@@ -9,13 +9,87 @@
     "start": "electron .",
     "test": "node --test test/logic.test.mjs test/realistic.test.mjs",
     "check": "node test/app-check.cjs",
-    "poses": "node test/poses.cjs poses.png"
+    "poses": "node test/poses.cjs poses.png",
+    "icons": "node scripts/make-icons.mjs",
+    "dist": "electron-builder",
+    "dist:win": "electron-builder --win",
+    "dist:mac": "electron-builder --mac"
   },
   "devDependencies": {
     "electron": "^39.0.0",
+    "electron-builder": "^26.15.3",
     "playwright-core": "1.62.1"
   },
   "engines": {
     "node": ">=22"
+  },
+  "productName": "Desktop Pet",
+  "author": "RJ1107",
+  "license": "MIT",
+  "homepage": "https://github.com/RJ1107/desktop-pet",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/RJ1107/desktop-pet.git"
+  },
+  "build": {
+    "appId": "io.github.rj1107.desktoppet",
+    "productName": "Desktop Pet",
+    "copyright": "Copyright (c) 2026 RJ1107",
+    "files": [
+      "src/**/*",
+      "personalities/**/*",
+      "package.json"
+    ],
+    "directories": {
+      "buildResources": "build",
+      "output": "dist"
+    },
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "icon": "build/icon.ico"
+    },
+    "nsis": {
+      "oneClick": true,
+      "perMachine": false,
+      "artifactName": "Desktop-Pet-Setup-${version}.${ext}",
+      "shortcutName": "Desktop Pet",
+      "uninstallDisplayName": "Desktop Pet"
+    },
+    "mac": {
+      "target": [
+        {
+          "target": "dmg",
+          "arch": [
+            "arm64",
+            "x64"
+          ]
+        }
+      ],
+      "icon": "build/icon.png",
+      "category": "public.app-category.entertainment",
+      "identity": "-",
+      "hardenedRuntime": false,
+      "extendInfo": {
+        "NSMicrophoneUsageDescription": "Talk to your pet by voice."
+      }
+    },
+    "dmg": {
+      "artifactName": "Desktop-Pet-${version}-${arch}.${ext}"
+    },
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "RJ1107",
+        "repo": "desktop-pet",
+        "releaseType": "release"
+      }
+    ]
   }
 }

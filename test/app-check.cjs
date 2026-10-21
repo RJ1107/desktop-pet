@@ -186,10 +186,13 @@ async function launch(data) {
 
   await step('chatting shows the reply without tags, the pet acts, and the fact is remembered', async () => {
     await overlay.evaluate(() => petDebug.openChat());
+    // The jump is over in under a second, possibly before the reply has finished typing out, so its height is
+    // watched from the moment the message is sent.
+    await overlay.evaluate(() => { window.__peak = 0; (function watch() { window.__peak = Math.max(window.__peak, petDebug.snapshot().alt); requestAnimationFrame(watch); })(); });
     await overlay.locator('#say-text').fill('My name is Sam');
     await overlay.locator('#say-text').press('Enter');
     await overlay.waitForFunction(() => document.getElementById('bubble-text').textContent === 'Nice to meet you, Sam.', null, {timeout: 10000});
-    await overlay.waitForFunction(() => petDebug.snapshot().alt > 10, null, {timeout: 3000}); // [[do: jump]]
+    await overlay.waitForFunction(() => window.__peak > 10, null, {timeout: 5000}); // [[do: jump]]
     if (shots) { await overlay.waitForTimeout(700); await capture('overlay-chat.png'); }
     const asked = model.requests.at(-1);
     assert.match(asked.system, /You are Oreo, a cat/); assert.match(asked.system, /What you are: a 5\.2 kg female black-and-white tuxedo/); assert.match(asked.system, /Very long hair on the ear tips/); assert.match(asked.system, /ate a bowl of kibble/); assert.match(asked.system, /was picked up/);

@@ -1,7 +1,8 @@
 node_modules/
 poses.png
 *.workboard-backup-*
-# The live board's tool is kept; its data (this project's own history) and local port are not.
+# The live board tool is kept; its data (this project own history) and local port are not.
 .agent-workboard/data/
 .agent-workboard/config.json
 WORKBOARD.md
+dist/
