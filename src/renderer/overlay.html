@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data: blob:; media-src data: blob:; style-src 'self'; script-src 'self'">
+  <title>Desktop Pet</title>
+  <link rel="stylesheet" href="overlay.css">
+</head>
+<body>
+  <canvas id="stage"></canvas>
+
+  <div id="menu" class="solid" hidden>
+    <div class="menu-main">
+      <button data-act="kibble"><i>🍖</i><span data-t="kibble"></span></button>
+      <button data-act="treat"><i>🍡</i><span data-t="treat"></span></button>
+      <button data-act="water"><i>💧</i><span data-t="water"></span></button>
+      <button data-act="chat"><i>💬</i><span data-t="talk"></span></button>
+      <button data-act="nap"><i>😴</i><span id="nap-label" data-t="nap"></span></button>
+    </div>
+    <div class="menu-foot">
+      <button data-act="settings">⚙️ <span data-t="settings"></span></button>
+      <button data-act="hide">🙈 <span data-t="hide"></span></button>
+      <button data-act="quit">👋 <span data-t="quit"></span></button>
+    </div>
+  </div>
+
+  <div id="chat" class="solid" hidden>
+    <div id="bubble" hidden><p id="bubble-text"></p><button id="bubble-action" hidden></button></div>
+    <form id="say">
+      <input id="say-text" type="text" maxlength="2000" autocomplete="off" data-t-placeholder="sayPlaceholder">
+      <button type="button" id="mic" aria-label="Voice">🎙️</button>
+      <button id="send" aria-label="Send">➤</button>
+      <button type="button" id="chat-close" aria-label="Close" data-t-title="close">✕</button>
+    </form>
+  </div>
+
+  <script type="module" src="overlay.js"></script>
+</body>
+</html>

@@ -1,0 +1,21 @@
+{
+  "name": "desktop-pet",
+  "version": "0.1.0",
+  "private": true,
+  "description": "A cat or dog that lives on your desktop, built from photos of your own pet.",
+  "type": "module",
+  "main": "src/main/main.js",
+  "scripts": {
+    "start": "electron .",
+    "test": "node --test test/logic.test.mjs test/realistic.test.mjs",
+    "check": "node test/app-check.cjs",
+    "poses": "node test/poses.cjs poses.png"
+  },
+  "devDependencies": {
+    "electron": "^39.0.0",
+    "playwright-core": "1.62.1"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}

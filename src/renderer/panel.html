@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data: blob:; media-src blob:; style-src 'self'; script-src 'self'">
+  <title>Desktop Pet</title>
+  <link rel="stylesheet" href="panel.css">
+</head>
+<body>
+  <header id="top">
+    <div class="brand"><span class="logo">🐾</span><b data-t="appName"></b><span class="current" id="current"></span></div>
+    <nav id="tabs">
+      <button data-tab="look" data-t="tabLook"></button>
+      <button data-tab="talk" data-t="tabTalk"></button>
+      <button data-tab="memory" data-t="tabMemory"></button>
+    </nav>
+  </header>
+
+  <main>
+    <section id="look" hidden>
+      <div class="preview">
+        <div class="stage">
+          <canvas id="preview" width="640" height="460"></canvas>
+          <p id="preview-note" data-t="previewEmpty" hidden></p>
+        </div>
+        <div class="poses" id="poses"></div>
+        <p class="status" id="look-summary"></p>
+      </div>
+      <div class="form">
+        <div class="pets"><span class="pets-title" data-t="petsTitle"></span><div id="pets"></div></div>
+        <h1 data-t="lookTitle"></h1>
+        <p class="lead" data-t="lookLead"></p>
+
+        <div class="step">
+          <h2><b>1</b><span data-t="stepWho"></span></h2>
+          <div class="grid">
+            <label><span data-t="name"></span><input id="name" maxlength="24" autocomplete="off"></label>
+            <label><span data-t="species"></span><select id="species"><option value="cat" data-t="cat"></option><option value="dog" data-t="dog"></option></select></label>
+            <label class="span"><span data-t="breed"></span><select id="breed"></select></label>
+            <label><span data-t="sex"></span><select id="sex"><option value="" data-t="sexNone"></option><option value="female" data-t="female"></option><option value="male" data-t="male"></option></select></label>
+            <label><span data-t="weight"></span><input id="weight" type="number" min="0.5" max="90" step="0.1" inputmode="decimal"></label>
+            <label class="swatch"><span data-t="coat"></span><span class="colour"><input type="color" id="base"><code id="base-hex"></code></span></label>
+            <label class="swatch"><span data-t="eyes"></span><span class="colour"><input type="color" id="eye"><code id="eye-hex"></code></span></label>
+          </div>
+          <div class="actions"><button class="primary" id="save-look"></button><span class="status" id="look-status"></span></div>
+        </div>
+
+        <div class="step">
+          <h2><b>2</b><span data-t="stepPhotos"></span></h2>
+          <p class="lead" data-t="photosLead"></p>
+          <div class="photos">
+            <button class="quiet strong" id="choose" data-t="choosePhotos"></button>
+            <div id="thumbs"></div>
+          </div>
+          <p class="hint" id="look-note" hidden></p>
+          <button class="quiet" id="ask-model" data-t="askModel" hidden></button>
+          <label class="describe"><span data-t="describe"></span>
+            <span class="describe-row"><textarea id="description" rows="2" maxlength="600" data-t-placeholder="describePlaceholder"></textarea><button type="button" class="mic" id="describe-mic" aria-label="Voice">🎙️</button></span>
+          </label>
+        </div>
+
+        <div class="step">
+          <h2><b>3</b><span data-t="stepMake"></span></h2>
+          <p class="lead" data-t="realLead"></p>
+          <div class="real-row">
+            <img id="real-reference" alt="" hidden>
+            <div class="real-steps">
+              <button class="quiet strong" id="real-make-reference"></button>
+              <button class="quiet strong" id="real-make-clips" disabled></button>
+            </div>
+          </div>
+          <ul id="real-progress"></ul>
+          <p class="status" id="real-hint" data-t="refilm" hidden></p>
+          <p class="status" id="real-status"></p>
+        </div>
+
+        <details class="extra" id="bowls">
+          <summary data-t="bowlsTitle"></summary>
+          <p class="lead" data-t="bowlsLead"></p>
+          <div class="bowl" data-kind="kibble">
+            <b data-t="bowlKibble"></b>
+            <div class="bowl-row">
+              <button class="quiet" data-do="pick" data-t="bowlPhotos"></button><span class="bowl-thumbs"></span>
+              <input class="bowl-words" maxlength="300" autocomplete="off" data-t-placeholder="bowlWords">
+            </div>
+            <div class="bowl-row"><button class="quiet strong" data-do="make"></button><button class="quiet" data-do="reset" data-t="bowlReset" hidden></button><img class="bowl-made" alt="" hidden></div>
+          </div>
+          <div class="bowl" data-kind="water">
+            <b data-t="bowlWater"></b>
+            <div class="bowl-row">
+              <button class="quiet" data-do="pick" data-t="bowlPhotos"></button><span class="bowl-thumbs"></span>
+              <input class="bowl-words" maxlength="300" autocomplete="off" data-t-placeholder="bowlWords">
+            </div>
+            <div class="bowl-row"><button class="quiet strong" data-do="make"></button><button class="quiet" data-do="reset" data-t="bowlReset" hidden></button><img class="bowl-made" alt="" hidden></div>
+          </div>
+          <p class="status" id="bowl-status"></p>
+        </details>
+      </div>
+    </section>
+
+    <section id="talk" hidden>
+      <div class="form wide">
+        <h1 data-t="talkTitle"></h1>
+        <p class="lead" data-t="talkLead"></p>
+        <div class="card">
+          <h2 data-t="connTitle"></h2>
+          <div class="grid">
+            <label class="span"><span data-t="apiAddress"></span><input id="baseUrl" autocomplete="off" spellcheck="false"></label>
+            <label class="span"><span data-t="apiKey"></span><input id="key" type="password" autocomplete="off" spellcheck="false"><small id="key-state"></small></label>
+          </div>
+        </div>
+        <div class="card">
+          <h2 data-t="voiceTitle"></h2>
+          <div class="grid">
+            <label class="check span"><input type="checkbox" id="speakAloud"><span data-t="speakAloud"></span></label>
+            <label class="span"><span data-t="voiceEngine"></span><select id="voiceEngine"><option value="system" data-t="voiceSystem"></option><option value="service" data-t="voiceService"></option></select></label>
+            <label class="service"><span data-t="voiceModel"></span><input id="voiceModel" autocomplete="off" spellcheck="false"></label>
+            <label class="service"><span data-t="voiceName"></span><input id="voiceName" autocomplete="off" spellcheck="false"></label>
+          </div>
+        </div>
+        <details class="card">
+          <summary data-t="modelsTitle"></summary>
+          <p class="lead" data-t="modelsLead"></p>
+          <div class="grid">
+            <label><span data-t="chatModel"></span><input id="chatModel" autocomplete="off" spellcheck="false"></label>
+            <label><span data-t="visionModel"></span><input id="visionModel" autocomplete="off" spellcheck="false"></label>
+            <label><span data-t="listenModel"></span><input id="listenModel" autocomplete="off" spellcheck="false"></label>
+            <label><span data-t="imageModel"></span><input id="imageModel" autocomplete="off" spellcheck="false"></label>
+            <label><span data-t="videoModel"></span><input id="videoModel" autocomplete="off" spellcheck="false"></label>
+          </div>
+        </details>
+        <div class="actions">
+          <button class="primary" id="save-settings" data-t="saveSettings"></button>
+          <button class="quiet" id="hello" data-t="sayHello"></button>
+          <button class="quiet danger" id="remove-key" data-t="removeKey" hidden></button>
+          <span class="status" id="talk-status"></span>
+        </div>
+        <p class="reply" id="hello-reply" hidden></p>
+
+        <div class="card">
+          <h2 data-t="personality"></h2>
+          <p class="lead" data-t="personalityLead"></p>
+          <p class="hint" id="personality-source"></p>
+          <pre id="personality-text"></pre>
+          <div class="actions"><button class="quiet" id="pick-personality" data-t="chooseFile"></button><button class="quiet" id="reset-personality" data-t="useBuiltIn"></button></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="memory" hidden>
+      <div class="form wide">
+        <h1><span data-t="memoryTitle"></span> <span class="count" id="memory-count"></span></h1>
+        <p class="lead" data-t="memoryLead"></p>
+        <div class="card">
+          <form id="memory-add" class="row"><input id="memory-text" maxlength="200" autocomplete="off" data-t-placeholder="memoryPlaceholder"><button class="primary" data-t="addMemory"></button></form>
+          <ul id="memories"></ul>
+        </div>
+        <div class="actions"><button class="quiet danger" id="forget-all" data-t="forgetAll"></button><button class="quiet" id="clear-chat" data-t="clearChat"></button><span class="status" id="memory-status"></span></div>
+      </div>
+    </section>
+  </main>
+  <script type="module" src="panel.js"></script>
+</body>
+</html>

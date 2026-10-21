@@ -1,0 +1,33 @@
+html, body { margin: 0; height: 100%; overflow: hidden; background: transparent; user-select: none; font-family: "Segoe UI", -apple-system, "PingFang SC", "Microsoft YaHei", system-ui, sans-serif; }
+#stage { position: fixed; inset: 0; width: 100%; height: 100%; }
+[hidden] { display: none !important; }
+
+#menu, #chat { position: fixed; left: 0; top: 0; z-index: 2; }
+#menu { display: grid; gap: 4px; padding: 8px; border-radius: 16px; background: rgba(255, 252, 246, .96); box-shadow: 0 10px 30px rgba(40, 28, 12, .28), 0 0 0 1px rgba(90, 60, 30, .12); animation: pop .16s ease-out; }
+.menu-main { display: grid; grid-template-columns: repeat(5, 1fr); gap: 4px; }
+.menu-main button { display: grid; justify-items: center; gap: 2px; width: 58px; padding: 8px 0 6px; border: 0; border-radius: 11px; background: transparent; color: #4b3a2a; font: 600 11px/1.2 inherit; cursor: pointer; transition: background .12s, transform .12s; }
+.menu-main button:hover { background: #f3e6d2; transform: translateY(-1px); }
+.menu-foot { display: flex; justify-content: center; gap: 2px; padding-top: 6px; border-top: 1px solid rgba(90, 60, 30, .12); }
+.menu-foot button { padding: 5px 10px; border: 0; border-radius: 99px; background: transparent; color: #7a5c3e; font: 600 11.5px/1.2 inherit; cursor: pointer; }
+.menu-foot button:hover { background: #f3e6d2; color: #4b3a2a; }
+#menu i { font-style: normal; font-size: 20px; line-height: 1.2; }
+
+#chat { width: 300px; display: grid; gap: 8px; }
+#bubble { position: relative; justify-self: start; max-width: 100%; padding: 10px 14px; border-radius: 16px; background: #fffdf8; color: #3a2c1e; font-size: 14px; line-height: 1.5; box-shadow: 0 8px 24px rgba(40, 28, 12, .25), 0 0 0 1px rgba(90, 60, 30, .12); animation: pop .18s ease-out; user-select: text; }
+#bubble p { margin: 0; white-space: pre-wrap; overflow-wrap: anywhere; }
+#bubble.thinking p::after { content: '…'; animation: dots 1s steps(3) infinite; }
+#bubble.problem { background: #fff4ee; color: #8a3b1c; }
+#bubble-action { margin-top: 8px; padding: 5px 12px; border: 0; border-radius: 99px; background: #e8a35c; color: #fff; font: 600 12px inherit; cursor: pointer; }
+#say { display: flex; gap: 6px; padding: 6px; border-radius: 99px; background: rgba(255, 252, 246, .97); box-shadow: 0 8px 24px rgba(40, 28, 12, .25), 0 0 0 1px rgba(90, 60, 30, .12); }
+#say input { flex: 1; min-width: 0; padding: 6px 10px; border: 0; background: transparent; color: #3a2c1e; font: 14px inherit; outline: none; user-select: text; }
+#say button { width: 32px; height: 32px; border: 0; border-radius: 50%; background: #f3e6d2; color: #6a4a2a; font-size: 14px; cursor: pointer; }
+#say button:hover { background: #ead4b4; }
+#say #send { background: #e8a35c; color: #fff; }
+#say #chat-close { background: transparent; color: #9a8672; font-size: 13px; }
+#say #chat-close:hover { background: #f3e6d2; color: #6a4a2a; }
+#mic.recording { background: #e5533d; animation: pulse 1s ease-in-out infinite; }
+#mic:disabled { opacity: .5; cursor: wait; }
+
+@keyframes pop { from { opacity: 0; transform: translateY(6px) scale(.96); } }
+@keyframes dots { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 -20% 0 0); } }
+@keyframes pulse { 50% { box-shadow: 0 0 0 6px rgba(229, 83, 61, .25); } }
