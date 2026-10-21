@@ -17,7 +17,7 @@ Windows and macOS. You bring your own API key; a full set of 18 motions costs ab
 **The easy way: download the installer** from the [latest release](https://github.com/RJ1107/desktop-pet/releases/latest).
 
 - **Windows:** `Desktop-Pet-Setup-<version>.exe`. Run it: it installs for you alone and starts. If Windows says "Windows protected your PC" (the installer is not signed with a paid certificate), click **More info → Run anyway**.
-- **macOS:** `Desktop-Pet-<version>-arm64.dmg` for Apple silicon (M1 and later), `…-x64.dmg` for Intel Macs. Open it and drag Desktop Pet into Applications. The app is not notarised by Apple, so the first time right-click it and choose **Open**, or allow it under **System Settings → Privacy & Security → Open Anyway**.
+- **macOS:** `Desktop-Pet-<version>-arm64.dmg` for Apple silicon (M1 and later), `…-x64.dmg` for Intel Macs. Open it and drag Desktop Pet into Applications. The app is not notarised by Apple, so the first time right-click it and choose **Open**, or allow it under **System Settings → Privacy & Security → Open Anyway**. If macOS still says the app is damaged or cannot be opened, run `xattr -cr "/Applications/Desktop Pet.app"` in Terminal once and open it again.
 
 **Or run it from the source** (for developers): see [Running from the source](#running-from-the-source) below.
 
